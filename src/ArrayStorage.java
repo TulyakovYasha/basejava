@@ -1,5 +1,4 @@
-import java.util.Arrays;
-import java.util.Collections;
+
 
 /**
  * Array based storage for Resumes
@@ -10,24 +9,20 @@ public class ArrayStorage {
     int sizeWithoutNull = 0;
 
     void clear() {
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < sizeWithoutNull; i++) {
             storage[i] = null;
         }
+        sizeWithoutNull = 0;
     }
 
     void save(Resume r) {
-        for (int i = 0; i< storage.length; i++){
-            if(storage[i] == null){
-                storage[i] = r;
-                break;
-            }
-        }
+        storage[sizeWithoutNull] = r;
         sizeWithoutNull++;
     }
 
     Resume get(String uuid) {
-        for(int i = 0; i < sizeWithoutNull; i++){
-            if(storage[i].uuid.equals(uuid)){
+        for (int i = 0; i < sizeWithoutNull; i++) {
+            if (storage[i].uuid.equals(uuid)) {
                 return storage[i];
             }
         }
@@ -35,14 +30,14 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
+        int index = 0;
         for (int i = 0; i < sizeWithoutNull; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                storage[i] = null;
+                index = i;
             }
-            System.arraycopy(storage, 1, storage, 0, storage.length-1);
-            storage[storage.length-1] = null;
-            sizeWithoutNull--;
         }
+        System.arraycopy(storage, index + 1, storage, 0, sizeWithoutNull-1);
+        sizeWithoutNull--;
     }
 
     /**
