@@ -3,16 +3,16 @@
  */
 public class ArrayStorage {
 
-    Resume[] storage = new Resume[10000];
-    int sizeWithoutNull = 0;
+    private Resume[] storage = new Resume[10_000];
+    private int sizeWithoutNull = 0;
 
-    public boolean exsists(String uuid) {
+    public int pos(String uuid) {
         for (int i = 0; i < sizeWithoutNull; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                return true;
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public void clear() {
@@ -23,62 +23,52 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (exsists(resume.uuid)) {
-            for (int i = 0; i < sizeWithoutNull; i++) {
-                if (resume.uuid.equals(storage[i].uuid)) {
-                    storage[i] = resume;
-                }
-            }
+        if (pos(resume.getUuid()) != -1) {
+            storage[pos(resume.getUuid())] = resume;
         } else {
-            System.out.println("No resume in update");
+            System.out.println("No resume in Update");
         }
     }
 
     public void save(Resume r) {
         if (sizeWithoutNull < storage.length) {
-            if (!exsists(r.uuid)) {
+            if (pos(r.getUuid()) == -1) {
                 storage[sizeWithoutNull] = r;
                 sizeWithoutNull++;
+            } else {
+                System.out.println("No this element in save");
             }
         } else {
-            System.out.println("Will be exception");
+            System.out.println("Arrays is full");
         }
     }
 
     public Resume get(String uuid) {
-        if (exsists(uuid)) {
-            for (int i = 0; i < sizeWithoutNull; i++) {
-                if (storage[i].uuid.equals(uuid)) {
-                    return storage[i];
-                }
-            }
+        if (pos(uuid) != -1) {
+            return storage[pos(uuid)];
         } else {
-            System.out.println("No resume in get");
+            System.out.println("No this element in get");
+            return null;
         }
-        return null;
     }
 
     public void delete(String uuid) {
-        if (exsists(uuid)) {
-            for (int i = 0; i < sizeWithoutNull; i++) {
-                if (storage[i].uuid.equals(uuid)) {
-                    sizeWithoutNull--;
-                    System.arraycopy(storage, i + 1, storage, i, sizeWithoutNull - i);
-                }
-            }
+        if (pos(uuid) != -1) {
+            storage[pos(uuid)] = storage[sizeWithoutNull - 1];
+            storage[sizeWithoutNull] = null;
+            sizeWithoutNull--;
         } else {
-            System.out.println("No resume in delete");
+            System.out.println("No element in delete");
         }
     }
+
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
         Resume[] resumes = new Resume[sizeWithoutNull];
-        for (int i = 0; i < sizeWithoutNull; i++) {
-            resumes[i] = storage[i];
-        }
+        System.arraycopy(storage, 0, resumes, 0, sizeWithoutNull);
         return resumes;
     }
 
