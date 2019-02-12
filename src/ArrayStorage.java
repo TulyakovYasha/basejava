@@ -6,14 +6,6 @@ public class ArrayStorage {
     private Resume[] storage = new Resume[10_000];
     private int sizeWithoutNull = 0;
 
-    public int pos(String uuid) {
-        for (int i = 0; i < sizeWithoutNull; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return i;
-            }
-        }
-        return -1;
-    }
 
     public void clear() {
         for (int i = 0; i < sizeWithoutNull; i++) {
@@ -23,17 +15,18 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (pos(resume.getUuid()) != -1) {
-            storage[pos(resume.getUuid())] = resume;
+        int index = getIndex(resume.getUuid());
+        if (index != -1) {
+            storage[index] = resume;
         } else {
             System.out.println("No resume in Update");
         }
     }
 
-    public void save(Resume r) {
+    public void save(Resume resume) {
         if (sizeWithoutNull < storage.length) {
-            if (pos(r.getUuid()) == -1) {
-                storage[sizeWithoutNull] = r;
+            if (getIndex(resume.getUuid()) == -1) {
+                storage[sizeWithoutNull] = resume;
                 sizeWithoutNull++;
             } else {
                 System.out.println("No this element in save");
@@ -44,8 +37,9 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        if (pos(uuid) != -1) {
-            return storage[pos(uuid)];
+        int index = getIndex(uuid);
+        if (index != -1) {
+            return storage[index];
         } else {
             System.out.println("No this element in get");
             return null;
@@ -53,9 +47,10 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        if (pos(uuid) != -1) {
-            storage[pos(uuid)] = storage[sizeWithoutNull - 1];
-            storage[sizeWithoutNull] = null;
+        int index = getIndex(uuid);
+        if (index != -1) {
+            storage[index] = storage[sizeWithoutNull - 1];
+            storage[sizeWithoutNull - 1] = null;
             sizeWithoutNull--;
         } else {
             System.out.println("No element in delete");
@@ -74,5 +69,14 @@ public class ArrayStorage {
 
     public int size() {
         return sizeWithoutNull;
+    }
+
+    private int getIndex(String uuid) {
+        for (int i = 0; i < sizeWithoutNull; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
