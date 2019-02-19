@@ -87,7 +87,7 @@ r1, r2, r3,..., rn, null, null,..., null
 <----- size ----->
 <------- storage.length (10000) ------->
 ```
-- Протестируйте вашу реализацию с помощью классов `MainArray.main()` и `MainTestArrayStorage.main()`
+- Протестируйте вашу реализацию с помощью классов `ru.javawebinar.basejava.MainArray.main()` и `ru.javawebinar.basejava.MainTestArrayStorage.main()`
 - Изучите дополнительные материалы по IntelliJ IDEA:
   - [Idea Wiki](https://github.com/JavaOPs/topjava/wiki/IDEA) ([поставьте кодировку UTF-8](https://github.com/JavaOPs/topjava/wiki/IDEA#Поставить-кодировку-utf-8), [поменяйте шрифт по умолчанию на DejaVu](https://github.com/JavaOPs/topjava/wiki/IDEA#Поменять-фонт-по-умолчанию-dejavu))
   - [Руководство пользователя IntelliJ IDEA. Отладчик](http://info.javarush.ru/idea_help/2014/01/22/Руководство-пользователя-IntelliJ-IDEA-Отладчик-.html)
@@ -111,7 +111,7 @@ r1, r2, r3,..., rn, null, null,..., null
 4. Не злоупотребляйте пустыми строками. Они используются нечасто для логического отделения больших кусков кода.
 5. Удаляйте неиспользуемые импорты (`Ctrl + Alt + O`)
 5. Не игнорируй подсказки IDEA (подсвечивает)
-6. `Resume r` — давай переменным осмысленные имена, например `resume`. `r` допустимо в коротких циклах и лямбдах.
+6. `ru.javawebinar.basejava.model.Resume r` — давай переменным осмысленные имена, например `resume`. `r` допустимо в коротких циклах и лямбдах.
 7. В методе `clear()` обнуление массива предполагает именно обнуление (null), а не создание нового
 
 # Дополнительно (как учиться программированию)
