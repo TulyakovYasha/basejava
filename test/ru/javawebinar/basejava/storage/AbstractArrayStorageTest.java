@@ -78,14 +78,14 @@ public abstract class AbstractArrayStorageTest {
         try {
             storage.save(new Resume());
             storage.save(new Resume());
-        }catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             Assert.fail();
         }
-        try{
-            for (int i = storage.size(); i < STORAGE_LIMIT + 1; i++){
+        try {
+            for (int i = storage.size(); i < STORAGE_LIMIT + 1; i++) {
                 storage.save(new Resume());
             }
-        }catch (StorageException e){
+        } catch (StorageException e) {
             Assert.assertTrue(1 > 0);
         }
     }
