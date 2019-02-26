@@ -71,11 +71,11 @@ public abstract class AbstractArrayStorageTest {
     @Test(expected = StorageException.class)
     public void overElement() throws Exception {
         storage.clear();
-        try{
-            for (int i =0; i < STORAGE_LIMIT; i++){
+        try {
+            for (int i = 0; i < STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Assert.fail("Error in add element");
         }
         storage.save(new Resume());
