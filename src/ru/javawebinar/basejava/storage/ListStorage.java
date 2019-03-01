@@ -6,7 +6,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void saveElement(Resume resume, int index) {
-        listStorage.add(index, resume);
+        listStorage.add(resume);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void updateResume(Resume resume, int index) {
-        listStorage.add(index, resume);
+        listStorage.set(index, resume);
     }
 
     @Override
