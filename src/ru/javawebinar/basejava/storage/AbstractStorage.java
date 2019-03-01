@@ -4,17 +4,7 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class AbstractStorage implements Storage {
-    protected List<Resume> listStorage = new ArrayList<>();
-
-    @Override
-    public void clear() {
-        listStorage.clear();
-    }
-
     @Override
     public void update(Resume r) {
         int index = getIndex(r.getUuid());
@@ -52,18 +42,6 @@ public abstract class AbstractStorage implements Storage {
         } else {
             deleteElement(index);
         }
-    }
-
-    @Override
-    public Resume[] getAll() {
-        Resume[] resumes = new Resume[listStorage.size()];
-        resumes = listStorage.toArray(resumes);
-        return resumes;
-    }
-
-    @Override
-    public int size() {
-        return listStorage.size();
     }
 
     protected abstract void saveElement(Resume resume, int index);
