@@ -21,7 +21,8 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteElement(Object key) {
-        listStorage.remove(((Integer) key).intValue());    }
+        listStorage.remove(((Integer) key).intValue());
+    }
 
     @Override
     protected Integer getKey(String uuid) {
@@ -39,7 +40,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume returnElementIndex(Object key) {
+    protected Resume getElement(Object key) {
         return listStorage.get((Integer) key);
     }
 
