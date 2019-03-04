@@ -7,8 +7,9 @@ import ru.javawebinar.basejava.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
+
     @Override
-    protected int getIndex(String uuid) {
+    protected Integer getKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) {
                 return i;
@@ -19,14 +20,13 @@ public class ArrayStorage extends AbstractArrayStorage {
 
 
     @Override
-    protected void updateSave(Resume resume, int index){
+    protected void updateSave(Resume resume, int index) {
         storage[size] = resume;
     }
 
     @Override
-    protected void deleteElement(int index) {
+    protected void updateDelete(int index) {
         storage[index] = storage[size - 1];
-        storage[size - 1] = null;
-        size--;
     }
+
 }

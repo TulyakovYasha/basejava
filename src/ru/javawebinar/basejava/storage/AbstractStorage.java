@@ -5,53 +5,56 @@ import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
+
     @Override
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            updateResume(r, index);
-        }
+        Object searchKey = existSearchKey(r.getUuid());
+        updateResume(r, searchKey);
     }
 
     @Override
     public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
-        } else {
-            saveElement(r, index);
-        }
+        Object searchKey = notExistSearchKey(r.getUuid());
+        saveElement(r, searchKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return returnElementIndex(index);
+        Object searchKey = existSearchKey(uuid);
+        return returnElementIndex(searchKey);
     }
 
     @Override
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            deleteElement(index);
+        Object searchKey = existSearchKey(uuid);
+        deleteElement(searchKey);
+    }
+    private Object existSearchKey(String uuid){
+        Object searchKey = getKey(uuid);
+        if(!isExist(searchKey)){
+            throw  new NotExistStorageException(uuid);
+        }else {
+            return searchKey;
         }
     }
+    private Object notExistSearchKey(String uuid){
+        Object searchKey = getKey(uuid);
+        if(isExist(searchKey)){
+            throw  new ExistStorageException(uuid);
+        }else {
+            return searchKey;
+        }
+    }
+    protected abstract boolean isExist(Object searchKey);
 
-    protected abstract void saveElement(Resume resume, int index);
+    protected abstract void saveElement(Resume resume, Object key);
 
-    protected abstract void deleteElement(int index);
+    protected abstract void deleteElement(Object key);
 
-    protected abstract int getIndex(String uuid);
+    protected abstract Object getKey(String uuid);
 
-    protected abstract void updateResume(Resume resume, int index);
+    protected abstract void updateResume(Resume resume, Object key);
 
-    protected abstract Resume returnElementIndex(int index);
+    protected abstract Resume returnElementIndex(Object key);
 
 }
