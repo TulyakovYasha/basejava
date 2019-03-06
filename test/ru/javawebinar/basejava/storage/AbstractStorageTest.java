@@ -8,6 +8,8 @@ import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.List;
+
 import static ru.javawebinar.basejava.storage.AbstractArrayStorage.STORAGE_LIMIT;
 
 public abstract class AbstractStorageTest {
@@ -25,10 +27,10 @@ public abstract class AbstractStorageTest {
     private static final Resume RESUME_4;
 
     static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
+        RESUME_1 = new Resume(UUID_1, "someName1");
+        RESUME_2 = new Resume(UUID_2, "someName2");
+        RESUME_3 = new Resume(UUID_3, "someName3");
+        RESUME_4 = new Resume(UUID_4, "someName4");
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -56,22 +58,22 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
-        Resume resume = new Resume(UUID_3);
+        Resume resume = new Resume(UUID_3, "someNewName");
         storage.update(resume);
         Assert.assertSame(resume, storage.get(UUID_3));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExist() {
-        storage.update(new Resume());
+        storage.update(new Resume("SomeNme"));
     }
 
     @Test
     public void getAll() throws Exception {
-        Resume[] resumes = storage.getAll();
-        Assert.assertEquals(storage.size(), resumes.length);
+        List<Resume> resumes = storage.getAllSorted();
+        Assert.assertEquals(storage.size(), resumes.size());
         Resume[] ourResumes = {RESUME_1, RESUME_2, RESUME_3};
-        Assert.assertArrayEquals(resumes, ourResumes);
+        Assert.assertArrayEquals(resumes.toArray(), ourResumes);
     }
 
     @Test(expected = StorageException.class)
@@ -79,12 +81,12 @@ public abstract class AbstractStorageTest {
         storage.clear();
         try {
             for (int i = 0; i < STORAGE_LIMIT; i++) {
-                storage.save(new Resume());
+                storage.save(new Resume("SomeNme"));
             }
         } catch (StorageException e) {
             Assert.fail("Error in add element");
         }
-        storage.save(new Resume());
+        storage.save(new Resume("SomeNme"));
     }
 
     @Test(expected = ExistStorageException.class)

@@ -5,10 +5,11 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
+
     @Override
     protected Integer getKey(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchKey);
+        Resume searchKey = new Resume(uuid, "someName");
+        return Arrays.binarySearch(storage, 0, size, searchKey, Resume.comparatorUuid);
     }
 
 

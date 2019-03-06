@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.*;
 
-public class MapStorage extends AbstractStorage {
+public class MapStorageTwo extends AbstractStorage {
     protected Map<String, Resume> map = new LinkedHashMap<>();
 
     @Override
