@@ -5,20 +5,11 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.*;
 
 public class MapStorage extends AbstractStorage {
-    protected Map<String, Resume> map = new LinkedHashMap<>();
+    private Map<String, Resume> map = new LinkedHashMap<>();
 
     @Override
     public void clear() {
         map.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>();
-        Resume[] resumes = map.values().toArray(new Resume[map.size()]);
-        Collections.addAll(list, resumes);
-        Collections.sort(list, Resume.comparator);
-        return list;
     }
 
     @Override
@@ -42,7 +33,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getKey(String uuid) {
+    protected String getKey(String uuid) {
         return uuid;
     }
 
@@ -54,5 +45,12 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected Resume getElement(Object key) {
         return map.get(key);
+    }
+
+    @Override
+    protected List<Resume> getAll() {
+        List<Resume> list = new ArrayList<>(map.values());
+        Collections.sort(list);
+        return list;
     }
 }

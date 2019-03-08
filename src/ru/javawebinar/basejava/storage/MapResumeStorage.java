@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.*;
 
 public class MapResumeStorage extends AbstractStorage {
-    private Map<String, Resume> map = new LinkedHashMap<>();
+    private Map<String, Resume> map = new HashMap<>();
 
     @Override
     protected Resume getKey(String uuid) {
@@ -13,8 +13,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume r, Object resume) {
-        map.put(r.getUuid(), r);
+    protected void updateResume(Resume resume, Object key) {
+        map.put(resume.getUuid(), resume);
     }
 
     @Override
@@ -23,13 +23,20 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveElement(Resume r, Object resume) {
-        map.put(r.getUuid(), r);
+    protected void saveElement(Resume resume, Object key) {
+        map.put(resume.getUuid(), resume);
     }
 
     @Override
     protected Resume getElement(Object resume) {
         return (Resume) resume;
+    }
+
+    @Override
+    protected List<Resume> getAll() {
+        List<Resume> list = new ArrayList<>(map.values());
+        Collections.sort(list);
+        return list;
     }
 
     @Override
@@ -40,11 +47,6 @@ public class MapResumeStorage extends AbstractStorage {
     @Override
     public void clear() {
         map.clear();
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        return new ArrayList<>(map.values());
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    protected List<Resume> listStorage = new ArrayList<>();
+    private List<Resume> listStorage = new ArrayList<>();
 
     @Override
     protected boolean isExist(Object searchKey) {
@@ -46,15 +46,16 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
+    protected List<Resume> getAll() {
+        Collections.sort(listStorage);
+        return listStorage;
+    }
+
+    @Override
     public void clear() {
         listStorage.clear();
     }
 
-    @Override
-    public List<Resume> getAllSorted(){
-        Collections.sort(listStorage, Resume.comparator);
-        return listStorage;
-    }
 
     @Override
     public int size() {

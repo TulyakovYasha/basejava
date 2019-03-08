@@ -4,33 +4,40 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
     @Override
-    public void update(Resume r) {
-        Object searchKey = existSearchKey(r.getUuid());
-        updateResume(r, searchKey);
+    public List<Resume> getAllSorted() {
+        return getAll();
     }
 
     @Override
-    public void save(Resume r) {
-        Object searchKey = notExistSearchKey(r.getUuid());
-        saveElement(r, searchKey);
+    public void update(Resume resume) {
+        Object searchKey = getExistSearchKey(resume.getUuid());
+        updateResume(resume, searchKey);
+    }
+
+    @Override
+    public void save(Resume resume) {
+        Object searchKey = getNotExistSearchKey(resume.getUuid());
+        saveElement(resume, searchKey);
     }
 
     @Override
     public Resume get(String uuid) {
-        Object searchKey = existSearchKey(uuid);
+        Object searchKey = getExistSearchKey(uuid);
         return getElement(searchKey);
     }
 
     @Override
     public void delete(String uuid) {
-        Object searchKey = existSearchKey(uuid);
+        Object searchKey = getExistSearchKey(uuid);
         deleteElement(searchKey);
     }
 
-    private Object existSearchKey(String uuid) {
+    private Object getExistSearchKey(String uuid) {
         Object searchKey = getKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
@@ -39,7 +46,7 @@ public abstract class AbstractStorage implements Storage {
         }
     }
 
-    private Object notExistSearchKey(String uuid) {
+    private Object getNotExistSearchKey(String uuid) {
         Object searchKey = getKey(uuid);
         if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
@@ -59,5 +66,6 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void updateResume(Resume resume, Object key);
 
     protected abstract Resume getElement(Object key);
+    protected abstract List<Resume> getAll();
 
 }
