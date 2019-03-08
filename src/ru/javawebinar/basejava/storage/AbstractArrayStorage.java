@@ -18,13 +18,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected int size = 0;
 
     @Override
-    public List<Resume> getAll(){
+    public List<Resume> getAll() {
         List<Resume> list = new ArrayList<>();
-        Resume[] resumesWithoutNull = Arrays.copyOfRange(storage, 0, size);
-        Collections.addAll(list,resumesWithoutNull);
-        Collections.sort(list);
+        Collections.addAll(list, Arrays.copyOfRange(storage, 0, size));
         return list;
     }
+
     @Override
     public int size() {
         return size;

@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.*;
 
 public class MapStorage extends AbstractStorage {
-    private Map<String, Resume> map = new LinkedHashMap<>();
+    private Map<String, Resume> map = new HashMap<>();
 
     @Override
     public void clear() {
@@ -50,7 +50,6 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected List<Resume> getAll() {
         List<Resume> list = new ArrayList<>(map.values());
-        Collections.sort(list);
         return list;
     }
 }

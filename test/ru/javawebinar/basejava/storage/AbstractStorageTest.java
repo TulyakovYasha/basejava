@@ -75,7 +75,7 @@ public abstract class AbstractStorageTest {
         ourResumes.add(RESUME_1);
         ourResumes.add(RESUME_2);
         ourResumes.add(RESUME_3);
-        assertArrayEquals(ourResumes.toArray(), resumes.toArray());
+        assertEquals(ourResumes, resumes);
     }
 
 
