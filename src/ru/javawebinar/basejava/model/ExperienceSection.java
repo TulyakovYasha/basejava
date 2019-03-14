@@ -67,10 +67,24 @@ public class ExperienceSection extends Section {
 
     @Override
     public String toString() {
+        String now;
+        if (endDate == null) {
+            now = "Сейчас";
+            return "ExperienceSection{" +
+                    "nameCompany='" + nameCompany + '\'' +
+                    ", startDate=" + startDate.getYear() +
+                    "-" + startDate.getMonthValue() +
+                    ", endDate=" + now +
+                    ", position='" + position + '\'' +
+                    ", info='" + info + '\'' +
+                    '}';
+        }
         return "ExperienceSection{" +
                 "nameCompany='" + nameCompany + '\'' +
-                ", startDate=" +  startDate +
-                ", endDate=" + endDate +
+                ", startDate=" + startDate.getYear()+
+                "-" + startDate.getMonthValue() +
+                ", endDate=" + endDate.getYear() +
+                "-" + startDate.getMonthValue() +
                 ", position='" + position + '\'' +
                 ", info='" + info + '\'' +
                 '}';
