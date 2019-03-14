@@ -1,28 +1,42 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Initial resume class
+ * ru.javawebinar.basejava.model.Resume class
  */
 public class Resume implements Comparable<Resume> {
+    public Map<ContactType, String> contactMap = new EnumMap<ContactType, String>(ContactType.class);
+    public Map<SectionType, Section> sectionMap = new EnumMap<SectionType, Section>(SectionType.class);
 
     // Unique identifier
     private final String uuid;
-    private String fullName;
+
+    private final String fullName;
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
     }
 
     public Resume(String uuid, String fullName) {
+        Objects.requireNonNull(uuid, "uuid must not be null");
+        Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
-
     }
 
     public String getUuid() {
         return uuid;
+    }
+    public Map<ContactType, String> getContactMap() {
+        return contactMap;
+    }
+
+    public Map<SectionType, Section> getSectionMap() {
+        return sectionMap;
     }
 
     public String getFullName() {
@@ -36,7 +50,9 @@ public class Resume implements Comparable<Resume> {
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid) && fullName.equals(((Resume) o).fullName);
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
+
     }
 
     @Override
@@ -48,7 +64,7 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return uuid + " " + fullName;
+        return uuid + '(' + fullName + ')';
     }
 
     @Override
