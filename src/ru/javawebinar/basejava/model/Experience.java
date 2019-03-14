@@ -3,29 +3,26 @@ package ru.javawebinar.basejava.model;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class ExperienceSection extends Section {
+public class Experience extends Section {
     private String nameCompany;
     private LocalDate startDate;
     private LocalDate endDate;
     private String position;
     private String info;
 
-    public ExperienceSection(String nameCompany, LocalDate startDate, LocalDate endDate, String info) {
+    public Experience(String nameCompany, LocalDate startDate, LocalDate endDate, String info) {
         this.nameCompany = nameCompany;
         this.startDate = startDate;
         this.endDate = endDate;
         this.info = info;
     }
 
-    public ExperienceSection(String nameCompany, LocalDate startDate, LocalDate endDate, String position, String info) {
+    public Experience(String nameCompany, LocalDate startDate, LocalDate endDate, String position, String info) {
         this.nameCompany = nameCompany;
         this.startDate = startDate;
         this.endDate = endDate;
         this.position = position;
         this.info = info;
-    }
-
-    public ExperienceSection() {
     }
 
     public String getNameCompany() {
@@ -52,7 +49,7 @@ public class ExperienceSection extends Section {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ExperienceSection that = (ExperienceSection) o;
+        Experience that = (Experience) o;
         return Objects.equals(nameCompany, that.nameCompany) &&
                 Objects.equals(startDate, that.startDate) &&
                 Objects.equals(endDate, that.endDate) &&
@@ -70,7 +67,7 @@ public class ExperienceSection extends Section {
         String now;
         if (endDate == null) {
             now = "Сейчас";
-            return "ExperienceSection{" +
+            return "Experience{" +
                     "nameCompany='" + nameCompany + '\'' +
                     ", startDate=" + startDate.getYear() +
                     "-" + startDate.getMonthValue() +
@@ -79,7 +76,7 @@ public class ExperienceSection extends Section {
                     ", info='" + info + '\'' +
                     '}';
         }
-        return "ExperienceSection{" +
+        return "Experience{" +
                 "nameCompany='" + nameCompany + '\'' +
                 ", startDate=" + startDate.getYear()+
                 "-" + startDate.getMonthValue() +

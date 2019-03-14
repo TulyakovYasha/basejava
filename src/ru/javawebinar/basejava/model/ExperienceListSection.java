@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ExperienceListSection extends Section {
-    List<Section> list;
+    private List<Section> list;
 
     public ExperienceListSection(List<Section> list) {
         this.list = list;

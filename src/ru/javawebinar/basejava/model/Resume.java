@@ -9,8 +9,8 @@ import java.util.UUID;
  * ru.javawebinar.basejava.model.Resume class
  */
 public class Resume implements Comparable<Resume> {
-    public Map<ContactType, String> contactMap = new EnumMap<ContactType, String>(ContactType.class);
-    public Map<SectionType, Section> sectionMap = new EnumMap<SectionType, Section>(SectionType.class);
+    public Map<ContactType, String> contactMap = new EnumMap<>(ContactType.class);
+    public Map<SectionType, Section> sectionMap = new EnumMap<>(SectionType.class);
 
     // Unique identifier
     private final String uuid;
@@ -44,25 +44,6 @@ public class Resume implements Comparable<Resume> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Resume resume = (Resume) o;
-
-        if (!uuid.equals(resume.uuid)) return false;
-        return fullName.equals(resume.fullName);
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = uuid.hashCode();
-        result = 31 * result + fullName.hashCode();
-        return result;
-    }
-
-    @Override
     public String toString() {
         return uuid + '(' + fullName + ')';
     }
@@ -71,5 +52,21 @@ public class Resume implements Comparable<Resume> {
     public int compareTo(Resume o) {
         int cmp = fullName.compareTo(o.fullName);
         return cmp != 0 ? cmp : uuid.compareTo(o.uuid);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resume resume = (Resume) o;
+        return Objects.equals(contactMap, resume.contactMap) &&
+                Objects.equals(sectionMap, resume.sectionMap) &&
+                Objects.equals(uuid, resume.uuid) &&
+                Objects.equals(fullName, resume.fullName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(contactMap, sectionMap, uuid, fullName);
     }
 }
