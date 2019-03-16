@@ -1,9 +1,12 @@
 package ru.javawebinar.basejava.model;
 
-public class SympleTextSection extends Section {
+import java.util.Objects;
+
+public class SimpleTextSection extends AbstractSection {
     private String someInfo;
 
-    public SympleTextSection(String someInfo) {
+    public SimpleTextSection(String someInfo) {
+        Objects.requireNonNull(someInfo, "Text sction must not be null");
         this.someInfo = someInfo;
     }
 
@@ -21,7 +24,7 @@ public class SympleTextSection extends Section {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        SympleTextSection that = (SympleTextSection) obj;
+        SimpleTextSection that = (SimpleTextSection) obj;
 
         return someInfo.equals(that.someInfo);
     }

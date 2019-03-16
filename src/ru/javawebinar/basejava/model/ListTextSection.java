@@ -1,11 +1,13 @@
 package ru.javawebinar.basejava.model;
 
 import java.util.List;
+import java.util.Objects;
 
-public class ListTextSection extends Section {
+public class ListTextSection extends AbstractSection {
     private final List<String> info;
 
     public ListTextSection(List<String> info) {
+        Objects.requireNonNull(info, "List info must not be null");
         this.info = info;
     }
 

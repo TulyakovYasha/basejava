@@ -3,14 +3,15 @@ package ru.javawebinar.basejava.model;
 import java.util.List;
 import java.util.Objects;
 
-public class ExperienceListSection extends Section {
-    private List<Section> list;
+public class ExperienceListSection extends AbstractSection {
+    private List<AbstractSection> list;
 
-    public ExperienceListSection(List<Section> list) {
+    public ExperienceListSection(List<AbstractSection> list) {
+        Objects.requireNonNull(list, "Experience must not be null");
         this.list = list;
     }
 
-    public List<Section> getList() {
+    public List<AbstractSection> getList() {
         return list;
     }
 

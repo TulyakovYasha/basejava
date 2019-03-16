@@ -10,7 +10,7 @@ import java.util.UUID;
  */
 public class Resume implements Comparable<Resume> {
     public Map<ContactType, String> contactMap = new EnumMap<>(ContactType.class);
-    public Map<SectionType, Section> sectionMap = new EnumMap<>(SectionType.class);
+    public Map<SectionType, AbstractSection> sectionMap = new EnumMap<>(SectionType.class);
 
     // Unique identifier
     private final String uuid;
@@ -31,11 +31,19 @@ public class Resume implements Comparable<Resume> {
     public String getUuid() {
         return uuid;
     }
+
+    public String getContact(ContactType type) {
+        return contactMap.get(type);
+    }
+    public AbstractSection getSection(SectionType type){
+        return sectionMap.get(type);
+    }
+
     public Map<ContactType, String> getContactMap() {
         return contactMap;
     }
 
-    public Map<SectionType, Section> getSectionMap() {
+    public Map<SectionType, AbstractSection> getSectionMap() {
         return sectionMap;
     }
 
