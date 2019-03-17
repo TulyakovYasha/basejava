@@ -39,20 +39,19 @@ public class MainFile {
             throw new RuntimeException(e);
         }
         listAll(filePath1, result);
-        for (String name : result) {
-            System.out.println(name);
-        }
     }
 
     private static void listAll(String path, List<String> res) {
         File dir = new File(path);
         File[] list = dir.listFiles();
 
-        for (File f : list) {
-            if (f.isFile()) {
-                res.add(f.getName());
-            } else {
-                listAll(f.getPath(), res);
+        if (list != null) {
+            for (File f : list) {
+                if (f.isFile()) {
+                    System.out.println(f.getName());
+                } else {
+                    listAll(f.getPath(), res);
+                }
             }
         }
     }

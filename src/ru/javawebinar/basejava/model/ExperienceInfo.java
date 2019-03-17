@@ -9,6 +9,21 @@ public class ExperienceInfo extends AbstractSection {
     private final String position;
     private String info;
 
+    public ExperienceInfo(LocalDate startDate, LocalDate endDate, String position) {
+        Objects.requireNonNull(startDate, "startDate must not be null");
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.position = position;
+    }
+
+    public ExperienceInfo(LocalDate startDate, LocalDate endDate, String position, String info) {
+        Objects.requireNonNull(startDate, "startDate must not be null");
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.position = position;
+        this.info = info;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -23,21 +38,6 @@ public class ExperienceInfo extends AbstractSection {
     @Override
     public int hashCode() {
         return Objects.hash(startDate, endDate, position, info);
-    }
-
-    public ExperienceInfo(LocalDate startDate, LocalDate endDate, String position) {
-        Objects.requireNonNull(startDate, "startDate must not be null");
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.position = position;
-    }
-
-    public ExperienceInfo(LocalDate startDate, LocalDate endDate, String position, String info) {
-        Objects.requireNonNull(startDate, "startDate must not be null");
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.position = position;
-        this.info = info;
     }
 
     @Override

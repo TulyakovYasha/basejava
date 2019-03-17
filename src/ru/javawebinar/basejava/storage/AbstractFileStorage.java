@@ -30,14 +30,19 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        for (File file : directory.listFiles()) {
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
             file.delete();
+            int size = 0;
         }
-        size = 0;
     }
 
     @Override
     public int size() {
+        for(File file : Objects.requireNonNull(directory.listFiles())){
+            if (file.isFile()){
+                size++;
+            }
+        }
         return size;
     }
 
@@ -51,7 +56,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             doWrite(r, file);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageException("IO error", file.getName(), e);
         }
     }
 
@@ -65,7 +70,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         try {
             file.createNewFile();
             doWrite(r, file);
-            size++;
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -81,13 +85,12 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void deleteElement(File file) {
         file.delete();
-        size--;
     }
 
     @Override
     protected List<Resume> getAll() {
         List<Resume> list = new ArrayList<>();
-        for(File file : directory.listFiles()){
+        for(File file : Objects.requireNonNull(directory.listFiles())){
           list.add(doRead(file));
         }
         return list;
