@@ -38,19 +38,20 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        listAll(filePath1, result);
+        listAll(filePath1);
     }
 
-    private static void listAll(String path, List<String> res) {
+    private static void listAll(String path) {
         File dir = new File(path);
         File[] list = dir.listFiles();
 
         if (list != null) {
             for (File f : list) {
                 if (f.isFile()) {
-                    System.out.println(f.getName());
+                    System.out.println("File name: " + f.getName());
                 } else {
-                    listAll(f.getPath(), res);
+                    System.out.println("Directory name : " + f.getName());
+                    listAll(f.getPath());
                 }
             }
         }
