@@ -48,9 +48,9 @@ public class MainFile {
         if (list != null) {
             for (File f : list) {
                 if (f.isFile()) {
-                    System.out.println("File name: " + f.getName());
+                    System.out.println("     File name: " + f.getName());
                 } else {
-                    System.out.println("Directory name : " + f.getName());
+                    System.out.println("   Directory name : " + f.getName());
                     listAll(f.getPath());
                 }
             }

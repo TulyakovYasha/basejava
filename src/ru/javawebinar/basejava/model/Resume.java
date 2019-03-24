@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
@@ -8,9 +9,10 @@ import java.util.UUID;
 /**
  * ru.javawebinar.basejava.model.Resume class
  */
-public class Resume implements Comparable<Resume> {
-    public Map<ContactType, String> contactMap = new EnumMap<>(ContactType.class);
-    public Map<SectionType, AbstractSection> sectionMap = new EnumMap<>(SectionType.class);
+public class Resume implements Comparable<Resume> , Serializable {
+    private static final long serialVersionUID = 1L;
+    public Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    public Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     // Unique identifier
     private final String uuid;
@@ -33,22 +35,31 @@ public class Resume implements Comparable<Resume> {
     }
 
     public String getContact(ContactType type) {
-        return contactMap.get(type);
+        return contacts.get(type);
     }
-    public AbstractSection getSection(SectionType type){
-        return sectionMap.get(type);
+
+    public AbstractSection getSection(SectionType type) {
+        return sections.get(type);
     }
 
     public Map<ContactType, String> getContactMap() {
-        return contactMap;
+        return contacts;
     }
 
     public Map<SectionType, AbstractSection> getSectionMap() {
-        return sectionMap;
+        return sections;
     }
 
     public String getFullName() {
         return fullName;
+    }
+
+    public void addContact(ContactType type, String value) {
+        contacts.put(type, value);
+    }
+
+    public void addSection(SectionType type, AbstractSection section) {
+        sections.put(type, section);
     }
 
     @Override
@@ -67,14 +78,14 @@ public class Resume implements Comparable<Resume> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(contactMap, resume.contactMap) &&
-                Objects.equals(sectionMap, resume.sectionMap) &&
+        return Objects.equals(contacts, resume.contacts) &&
+                Objects.equals(sections, resume.sections) &&
                 Objects.equals(uuid, resume.uuid) &&
                 Objects.equals(fullName, resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(contactMap, sectionMap, uuid, fullName);
+        return Objects.hash(contacts, sections, uuid, fullName);
     }
 }
