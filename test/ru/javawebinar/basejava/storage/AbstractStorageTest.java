@@ -11,8 +11,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = new File("C:\\Users\\Jayton\\projects\\basejava\\storage");
@@ -85,7 +84,7 @@ public abstract class AbstractStorageTest {
     public void update() throws Exception {
         Resume resume = new Resume(UUID_3, "someNewName");
         storage.update(resume);
-        assertSame(resume, storage.get(UUID_3));
+        assertTrue(resume.equals(storage.get(UUID_3)));
     }
 
     @Test(expected = NotExistStorageException.class)

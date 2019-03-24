@@ -46,7 +46,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Path getKey(String uuid) {
-        return Paths.get(uuid);
+        return new File(directory.toString(), uuid).toPath();
     }
 
     @Override
@@ -65,7 +65,11 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 
     @Override
     protected void saveElement(Resume r, Path path) {
-        path.toFile();
+        try {
+            Files.createFile(path);
+        } catch (IOException e) {
+            throw new StorageException("Couldn't create Path " + path, path.getFileName().toString(), e);
+        }
         updateResume(r, path);
     }
 
@@ -81,7 +85,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     protected void deleteElement(Path path) {
         try {
-            Files.delete(path);
+            Files.deleteIfExists(path);
         } catch (IOException e) {
             throw new StorageException("Path delete error", path.getFileName().toString());
         }
