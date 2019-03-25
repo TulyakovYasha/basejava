@@ -6,13 +6,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * ru.javawebinar.basejava.model.Resume class
- */
-public class Resume implements Comparable<Resume> , Serializable {
+
+public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
-    public Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    public Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     // Unique identifier
     private final String uuid;

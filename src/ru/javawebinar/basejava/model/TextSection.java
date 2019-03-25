@@ -4,20 +4,20 @@ import java.util.Objects;
 
 public class TextSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
-    private String someInfo;
+    private String text;
 
-    public TextSection(String someInfo) {
-        Objects.requireNonNull(someInfo, "Text sction must not be null");
-        this.someInfo = someInfo;
+    public TextSection(String text) {
+        Objects.requireNonNull(text, "Text section must not be null");
+        this.text = text;
     }
 
     public String getSomeInfo() {
-        return someInfo;
+        return text;
     }
 
     @Override
     public int hashCode() {
-        return someInfo.hashCode();
+        return text.hashCode();
     }
 
     @Override
@@ -27,11 +27,11 @@ public class TextSection extends AbstractSection {
 
         TextSection that = (TextSection) obj;
 
-        return someInfo.equals(that.someInfo);
+        return text.equals(that.text);
     }
 
     @Override
     public String toString() {
-        return someInfo;
+        return text;
     }
 }
