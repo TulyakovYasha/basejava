@@ -2,7 +2,7 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.Serializer.FileSaveStrategy;
+import ru.javawebinar.basejava.storage.Serializer.IOFileStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
-    private FileSaveStrategy serializer;
+    private IOFileStrategy serializer;
 
-    protected FileStorage(File directory, FileSaveStrategy serializer) {
+    protected FileStorage(File directory, IOFileStrategy serializer) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");

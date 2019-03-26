@@ -12,11 +12,29 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static ru.javawebinar.basejava.ResumeTestData.*;
+import static ru.javawebinar.basejava.ResumeTestData.addInfo;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = new File("C:\\Users\\Jayton\\projects\\basejava\\storage");
     protected Storage storage;
+
+    public static final String UUID_1 = "uuid1";
+    public static final String UUID_2 = "uuid2";
+    public static final String UUID_3 = "uuid3";
+    public static final String UUID_4 = "uuid4";
+
+    public static Resume R1;
+    public static Resume R2;
+    public static Resume R3;
+    public static Resume R4;
+
+    static {
+        R1 = addInfo("Name1", UUID_1);
+        R2 = addInfo("Name2", UUID_2);
+        R3 = addInfo("Name3", UUID_3);
+        R4 = addInfo("Name4", UUID_4);
+    }
+
 
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;

@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.io.*;
 
-public class ObjectSerializer implements FileSaveStrategy {
+public class ObjectSerializer implements IOFileStrategy {
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
