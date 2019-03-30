@@ -8,9 +8,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
@@ -19,8 +20,8 @@ public class PathStorage extends AbstractStorage<Path> {
 
     protected PathStorage(String dir, IOFileStrategy serializer) {
         directory = Paths.get(dir);
-        this.serializer = serializer;
         Objects.requireNonNull(directory, "directory must not be null");
+        this.serializer = serializer;
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
@@ -29,31 +30,23 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::deleteElement);
-        } catch (IOException e) {
-            throw new StorageException("Path delete error", null);
-        }
+        getFilesList().forEach(this::deleteElement);
     }
 
     @Override
     public int size() {
-        String[] list = directory.toFile().list();
-        if (list == null) {
-            throw new StorageException("Directory read error", null);
-        }
-        return list.length;
+        return (int) getFilesList().count();
     }
 
     @Override
     protected Path getKey(String uuid) {
-        return new File(directory.toString(), uuid).toPath();
+        return directory.resolve(uuid);
     }
 
     @Override
     protected void updateResume(Resume r, Path path) {
         try {
-            serializer.doWrite(r, new BufferedOutputStream(new FileOutputStream(path.toFile())));
+            serializer.doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path write error", r.getUuid(), e);
         }
@@ -61,7 +54,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected boolean isExist(Path path) {
-        return Files.exists(path);
+        return Files.isRegularFile(path);
     }
 
     @Override
@@ -69,7 +62,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("Couldn't create Path " + path, path.getFileName().toString(), e);
+            throw new StorageException("Couldn't create Path " + path, getFileName(path), e);
         }
         updateResume(r, path);
     }
@@ -77,9 +70,9 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getElement(Path path) {
         try {
-            return serializer.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
+            return serializer.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("Path read error", path.getFileName().toString(), e);
+            throw new StorageException("Path read error", getFileName(path), e);
         }
     }
 
@@ -94,14 +87,18 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getAll() {
-        File[] files = directory.toFile().listFiles();
-        if (files == null) {
-            throw new StorageException("Directory read error", null);
+        return getFilesList().map(this::getElement).collect(Collectors.toList());
+    }
+
+    private String getFileName(Path path) {
+        return path.getFileName().toString();
+    }
+
+    private Stream<Path> getFilesList() {
+        try {
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("Directory read error", e);
         }
-        List<Resume> list = new ArrayList<>(files.length);
-        for (File file : files) {
-            list.add(getElement(file.toPath()));
-        }
-        return list;
     }
 }

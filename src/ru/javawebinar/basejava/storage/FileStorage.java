@@ -40,7 +40,7 @@ public class FileStorage extends AbstractStorage<File> {
     public int size() {
         String[] files = directory.list();
         if (files == null) {
-            throw new StorageException("Error", null);
+            throw new StorageException("Error");
         }
         return files.length;
     }
@@ -98,7 +98,7 @@ public class FileStorage extends AbstractStorage<File> {
     protected List<Resume> getAll() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error");
         }
         List<Resume> list = new ArrayList<>();
         for (File file : files) {

@@ -2,11 +2,9 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.storage.Serializer.ObjectSerializer;
 
-import static org.junit.Assert.*;
+public class ObjectPathStorageTest extends AbstractStorageTest {
 
-public class ObjectStreamPathStorageTest extends AbstractStorageTest {
-
-    public ObjectStreamPathStorageTest() {
+    public ObjectPathStorageTest() {
         super(new PathStorage(STORAGE_DIR.toString(), new ObjectSerializer()));
     }
 }

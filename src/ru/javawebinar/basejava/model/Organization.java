@@ -1,5 +1,10 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
@@ -10,11 +15,14 @@ import java.util.Objects;
 import static ru.javawebinar.basejava.util.DateUtil.NOW;
 import static ru.javawebinar.basejava.util.DateUtil.of;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final Link homePage;
+    private Link homePage;
     private List<Position> positions;
 
+    public Organization() {
+    }
 
     public Organization(String name, String url, Position... positions) {
         this(new Link(name, url), Arrays.asList(positions));
@@ -25,6 +33,13 @@ public class Organization implements Serializable {
         this.positions = positions;
     }
 
+    public Link getHomePage() {
+        return homePage;
+    }
+
+    public List<Position> getPositions() {
+        return positions;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -45,12 +60,17 @@ public class Organization implements Serializable {
         return "Organization(" + homePage + "," + positions + ')';
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
-        private static final long serialVersionUID = 1L;
-        private final LocalDate startDate;
-        private final LocalDate endDate;
-        private final String tittle;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private  LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private  LocalDate endDate;
+        private  String tittle;
         private String info;
+
+        public Position() {
+        }
 
         public Position(int startYear, Month startMonth, String position, String info) {
             this(of(startYear, startMonth), NOW, position, info);
@@ -67,7 +87,7 @@ public class Organization implements Serializable {
             this.startDate = startDate;
             this.endDate = endDate;
             this.tittle = tittle;
-            this.info = info;
+            this.info = info == null ? "" : info;
         }
 
         public LocalDate getStartDate() {
@@ -78,7 +98,7 @@ public class Organization implements Serializable {
             return endDate;
         }
 
-        public String getPosition() {
+        public String getTittle() {
             return tittle;
         }
 
