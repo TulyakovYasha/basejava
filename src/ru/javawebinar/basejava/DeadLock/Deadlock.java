@@ -1,28 +1,25 @@
-package ru.javawebinar.basejava.DeadLock;
+package ru.javawebinar.basejava.Deadlock;
 
 public class Deadlock implements Runnable {
-
-    FirstClass a = new FirstClass();
-    SecondClass b = new SecondClass();
+    Bread bread = new Bread();
+    Knife knife = new Knife();
 
     Deadlock() {
         Thread.currentThread().setName("Главный поток");
-        Thread t = new Thread(this, "Соперничающий поток");
+        Thread t = new Thread(this, "Второй поток");
         t.start();
-
-        a.foo(b); // получить блокировку для объекта a
-        // в этом потоке исполнения
-
-        System.out.println("Назад в главный поток");
+        bread.takeBread(knife);
     }
 
+    @Override
     public void run() {
-        b.bar(a); // получить блокировку для объекта b
-        // в другом потоке исполнения
-        System.out.println("Назад в другой поток");
+        knife.takeKnfie(bread);
     }
 
-    public static void main(String args[]) {
-        new Deadlock();
+
+    public static void main(String[] args) {
+        Deadlock deadlock = new Deadlock();
+        deadlock.run();
     }
+
 }
