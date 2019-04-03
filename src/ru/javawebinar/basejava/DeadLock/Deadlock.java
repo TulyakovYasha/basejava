@@ -1,4 +1,4 @@
-package ru.javawebinar.basejava.Deadlock;
+package ru.javawebinar.basejava.deadlock;
 
 public class Deadlock implements Runnable {
     Bread bread = new Bread();

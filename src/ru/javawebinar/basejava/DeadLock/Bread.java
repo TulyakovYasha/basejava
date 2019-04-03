@@ -1,4 +1,4 @@
-package ru.javawebinar.basejava.Deadlock;
+package ru.javawebinar.basejava.deadlock;
 
 public class Bread {
 
