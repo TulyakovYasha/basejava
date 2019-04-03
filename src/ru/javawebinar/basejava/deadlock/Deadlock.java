@@ -1,25 +1,46 @@
 package ru.javawebinar.basejava.deadlock;
 
-public class Deadlock implements Runnable {
-    Bread bread = new Bread();
-    Knife knife = new Knife();
+public class Deadlock {
+    static class Friend {
+        private final String name;
 
-    Deadlock() {
-        Thread.currentThread().setName("Главный поток");
-        Thread t = new Thread(this, "Второй поток");
-        t.start();
-        bread.takeBread(knife);
+        public Friend(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public synchronized void bow(Friend bower) {
+            System.out.format("%s: %s" + "  has bowed to me!%n", this.name, bower.getName());
+            bower.bowBack(this);
+        }
+
+        public synchronized void bowBack(Friend bower) {
+            System.out.format("%s: %s"
+                            + " has bowed back to me!%n",
+                    this.name, bower.getName());
+        }
     }
-
-    @Override
-    public void run() {
-        knife.takeKnfie(bread);
-    }
-
 
     public static void main(String[] args) {
-        Deadlock deadlock = new Deadlock();
-        deadlock.run();
-    }
+        final Friend alphonse =
+                new Friend("Alphonse");
+        final Friend gaston =
+                new Friend("Gaston");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                alphonse.bow(gaston);
+            }
+        }).start();
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                gaston.bow(alphonse);
+            }
+        }).start();
+    }
 }
