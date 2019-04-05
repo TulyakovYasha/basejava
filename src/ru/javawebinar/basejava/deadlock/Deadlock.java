@@ -14,6 +14,11 @@ public class Deadlock {
 
         public synchronized void bow(Friend bower) {
             System.out.format("%s: %s" + "  has bowed to me!%n", this.name, bower.getName());
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             bower.bowBack(this);
         }
 
