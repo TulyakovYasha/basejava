@@ -1,9 +1,12 @@
 package ru.javawebinar.basejava;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.OptionalInt;
 
 public class MainStreams {
-    private static int sum = 0;
+    private static int sum;
 
     public static void main(String[] args) {
         List<Integer> integers = new ArrayList<>();
@@ -15,39 +18,37 @@ public class MainStreams {
         integers.add(6);
         integers.add(7);
         integers.add(8);
-        for (Integer integer : oddOrEven(integers)){
+        for (Integer integer : oddOrEven(integers)) {
             System.out.println(integer);
         }
-        int[] values = {1,1,2,3,2,3};
+        int[] values = {9, 8};
         System.out.println(minValue(values));
 
     }
-    public static int minValue(int[] values){
-        Set<Integer> set = new TreeSet<>();
-        Arrays.stream(values).forEach(set::add);
-        StringBuilder sb = new StringBuilder();
-        set.stream().forEach(sb::append);
-        return Integer.parseInt(sb.toString());
+
+    public static int minValue(int[] values) {
+        OptionalInt value = Arrays.stream(values).distinct().sorted().reduce((x, y) -> Integer.parseInt(String.format("%d%d", x, y)));
+        return value.getAsInt();
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
-        List<Integer> odd = new ArrayList<>();
-        List<Integer> even = new ArrayList<>();
+
+        List<Integer> list = new ArrayList<>();
+        for (Integer ints : integers) {
+            sum = sum + ints;
+        }
         integers.forEach(integer -> {
-            if(integer % 2 == 0){
-                even.add(integer);
-                sum = sum + integer;
-            }else{
-                odd.add(integer);
-                sum = sum + integer;
+            if(sum % 2 == 0){
+                if(integer % 2 == 0){
+                    list.add(integer);
+                }
+            }else {
+                if(integer % 2 != 0){
+                    list.add(integer);
+                }
             }
         });
-        if( sum % 2 == 0){
-            integers.removeAll(odd);
-        } else {
-            integers.removeAll(even);
-        }
-        return integers;
+        return list;
     }
 
 }
