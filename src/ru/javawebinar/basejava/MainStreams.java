@@ -1,12 +1,10 @@
 package ru.javawebinar.basejava;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.OptionalInt;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainStreams {
-    private static int sum;
+
 
     public static void main(String[] args) {
         List<Integer> integers = new ArrayList<>();
@@ -18,37 +16,30 @@ public class MainStreams {
         integers.add(6);
         integers.add(7);
         integers.add(8);
+        integers.add(9);
         for (Integer integer : oddOrEven(integers)) {
             System.out.println(integer);
         }
-        int[] values = {9, 8};
+        int[] values = {3, 1, 2, 3, 1, 2};
         System.out.println(minValue(values));
 
     }
 
-    public static int minValue(int[] values) {
-        OptionalInt value = Arrays.stream(values).distinct().sorted().reduce((x, y) -> Integer.parseInt(String.format("%d%d", x, y)));
-        return value.getAsInt();
+    private static int minValue(int[] values) {
+        return Arrays.stream(values).distinct().sorted().reduce((x, y) -> y + x * 10).getAsInt();
     }
 
-    public static List<Integer> oddOrEven(List<Integer> integers) {
+    private static List<Integer> oddOrEven(List<Integer> integers) {
+        return integers.stream().mapToInt(Integer::intValue).sum() % 2 == 0 ? oddOrEvenDelete(true, integers) : oddOrEvenDelete(false, integers);
+    }
 
-        List<Integer> list = new ArrayList<>();
-        for (Integer ints : integers) {
-            sum = sum + ints;
+    private static List<Integer> oddOrEvenDelete(boolean oddOrEven, List<Integer> integers) {
+        if (oddOrEven) {
+            return integers.stream().collect(Collectors.partitioningBy(x -> x % 2 == 0)).get(true);
+        } else {
+            return integers.stream().collect(Collectors.partitioningBy(x -> x % 2 != 0)).get(true);
         }
-        integers.forEach(integer -> {
-            if(sum % 2 == 0){
-                if(integer % 2 == 0){
-                    list.add(integer);
-                }
-            }else {
-                if(integer % 2 != 0){
-                    list.add(integer);
-                }
-            }
-        });
-        return list;
+
     }
 
 }
