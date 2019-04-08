@@ -16,7 +16,6 @@ public class MainStreams {
         integers.add(6);
         integers.add(7);
         integers.add(8);
-        integers.add(9);
         for (Integer integer : oddOrEven(integers)) {
             System.out.println(integer);
         }
@@ -34,12 +33,7 @@ public class MainStreams {
     }
 
     private static List<Integer> oddOrEvenDelete(boolean oddOrEven, List<Integer> integers) {
-        if (oddOrEven) {
-            return integers.stream().collect(Collectors.partitioningBy(x -> x % 2 == 0)).get(true);
-        } else {
-            return integers.stream().collect(Collectors.partitioningBy(x -> x % 2 != 0)).get(true);
-        }
-
+        return integers.stream().collect(Collectors.partitioningBy(x -> x % 2 == 0)).get(oddOrEven);
     }
 
 }
