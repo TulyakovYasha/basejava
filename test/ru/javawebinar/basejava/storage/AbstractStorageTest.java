@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.storage;
 
+
+import ru.javawebinar.basejava.Config;
 import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.exception.ExistStorageException;
@@ -8,20 +10,22 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static ru.javawebinar.basejava.ResumeTestData.addInfo;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("C:\\Users\\Jayton\\projects\\basejava\\storage");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
     protected Storage storage;
 
-    public static final String UUID_1 = "uuid1";
-    public static final String UUID_2 = "uuid2";
-    public static final String UUID_3 = "uuid3";
-    public static final String UUID_4 = "uuid4";
+    public static final String UUID_1 = UUID.randomUUID().toString();
+    public static final String UUID_2 = UUID.randomUUID().toString();
+    public static final String UUID_3 = UUID.randomUUID().toString();
+    public static final String UUID_4 = UUID.randomUUID().toString();
 
     public static Resume R1;
     public static Resume R2;
@@ -74,11 +78,12 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() throws Exception {
         List<Resume> resumes = storage.getAllSorted();
-        assertEquals(storage.size(), resumes.size());
+        assertEquals(resumes.size(), storage.size());
         List<Resume> ourResumes = new ArrayList<>();
         ourResumes.add(R1);
         ourResumes.add(R2);
         ourResumes.add(R3);
+        Collections.sort(ourResumes);
         assertEquals(ourResumes, resumes);
     }
 
