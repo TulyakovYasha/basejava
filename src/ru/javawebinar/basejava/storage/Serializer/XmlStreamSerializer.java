@@ -29,4 +29,4 @@ public class XmlStreamSerializer implements IOFileStrategy {
             return xmlParser.unmarshall(r);
         }
     }
-} 
+}

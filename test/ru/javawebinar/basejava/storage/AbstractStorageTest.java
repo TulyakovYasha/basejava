@@ -1,15 +1,15 @@
 package ru.javawebinar.basejava.storage;
 
 
-import ru.javawebinar.basejava.Config;
 import org.junit.Before;
 import org.junit.Test;
+import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -38,8 +38,6 @@ public abstract class AbstractStorageTest {
         R3 = addInfo("Name3", UUID_3);
         R4 = addInfo("Name4", UUID_4);
     }
-
-
     protected AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
@@ -78,11 +76,8 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAll() throws Exception {
         List<Resume> resumes = storage.getAllSorted();
-        assertEquals(resumes.size(), storage.size());
-        List<Resume> ourResumes = new ArrayList<>();
-        ourResumes.add(R1);
-        ourResumes.add(R2);
-        ourResumes.add(R3);
+        assertEquals(3, resumes.size());
+        List<Resume> ourResumes = Arrays.asList(R1,R2,R3);
         Collections.sort(ourResumes);
         assertEquals(ourResumes, resumes);
     }
