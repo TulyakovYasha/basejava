@@ -1,7 +1,6 @@
 package ru.javawebinar.basejava;
 
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 
 public class ResumeTestData {
 
@@ -14,8 +13,8 @@ public class ResumeTestData {
         resume = new Resume(uuid, fullName);
         resume.addContact(ContactType.MAIL, "mail1@ya.ru");
         resume.addContact(ContactType.PHONE, "11111");
-//        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
-//        resume.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
 //        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Achivment11", "Achivment12", "Achivment13"));
 //        resume.addSection(SectionType.QUALIFICATIONS, new ListSection("Java", "SQL", "JavaScript"));
 //        resume.addSection(SectionType.EXPERIENCE,

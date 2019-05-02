@@ -8,6 +8,8 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.SectionType;
+import ru.javawebinar.basejava.model.TextSection;
 
 import java.io.File;
 import java.util.*;
@@ -65,6 +67,7 @@ public abstract class AbstractStorageTest {
         resume.addContact(ContactType.PHONE, "12312313");
         resume.addContact(ContactType.MAIL, "mail");
         resume.addContact(ContactType.SKYPE, "Skype");
+        resume.addSection(SectionType.PERSONAL, new TextSection("tratata"));
         storage.update(resume);
         assertTrue(resume.equals(storage.get(UUID_3)));
     }
@@ -83,7 +86,7 @@ public abstract class AbstractStorageTest {
         ourResumes.add(R2);
         ourResumes.add(R3);
         Collections.sort(ourResumes);
-        assertEquals(ourResumes, resumes);
+        assertEquals(resumes, ourResumes);
     }
 
 
