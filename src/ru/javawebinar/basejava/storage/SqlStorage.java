@@ -105,19 +105,19 @@ public class SqlStorage implements Storage {
             }
             try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM contact")) {
                 ResultSet rs = preparedStatement.executeQuery();
-                for (Resume resume : resumes) {
-                    while (rs.next()) {
-                        if (resume.getUuid().equals(rs.getString("resume_uuid"))) {
+                while (rs.next()) {
+                    for (Resume resume : resumes) {
+                        if (rs.getString("resume_uuid").equals(resume.getUuid())) {
                             addContacts(rs, resume);
                         }
                     }
                 }
             }
-            try(PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM sections")) {
+            try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM sections")) {
                 ResultSet rs = preparedStatement.executeQuery();
-                for (Resume resume : resumes){
-                    while (rs.next()){
-                        if(resume.getUuid().equals(rs.getString("uuid_section"))){
+                while (rs.next()) {
+                    for(Resume resume : resumes){
+                        if(rs.getString("uuid_section").equals(resume.getUuid())){
                             addSections(rs, resume);
                         }
                     }
@@ -162,32 +162,40 @@ public class SqlStorage implements Storage {
     }
 
     private void addSections(ResultSet rs, Resume r) throws SQLException {
-        SectionType sectionType = renameSection(rs.getString("section_type"));
+        SectionType sectionType = SectionType.valueOf(rs.getString("section_type"));
         String sectionValue = rs.getString("section_value");
-        if (sectionType.equals(SectionType.PERSONAL) || sectionType.equals(SectionType.OBJECTIVE)) {
-            TextSection textSection = new TextSection(sectionValue);
-            r.addSection(sectionType, textSection);
-        } else if (sectionType.equals(SectionType.QUALIFICATIONS) || sectionType.equals(SectionType.ACHIEVEMENT)) {
-            ListSection listSection = new ListSection(sectionValue);
-            r.addSection(sectionType, listSection);
+        switch (sectionType) {
+            case PERSONAL:
+            case OBJECTIVE:
+                TextSection textSection = new TextSection(sectionValue);
+                r.addSection(sectionType, textSection);
+                break;
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                ListSection listSection = new ListSection(sectionValue);
+                r.addSection(sectionType, listSection);
+                break;
         }
     }
 
     private void insertSections(Connection conn, Resume r) throws SQLException {
         try (PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO sections (UUID_SECTION, SECTION_TYPE, SECTION_VALUE) VALUES (?, ?, ?)")) {
+            preparedStatement.setString(1, r.getUuid());
             for (Map.Entry<SectionType, AbstractSection> map : r.getSections().entrySet()) {
-                if (map.getKey().equals(SectionType.PERSONAL) || map.getKey().equals(SectionType.OBJECTIVE)) {
-                    TextSection textSection = (TextSection) map.getValue();
-                    preparedStatement.setString(1, r.getUuid());
-                    preparedStatement.setString(2, map.getKey().getTitle());
-                    preparedStatement.setString(3, textSection.getText());
-                } else if (map.getKey().equals(SectionType.ACHIEVEMENT) || map.getKey().equals(SectionType.QUALIFICATIONS)) {
-                    ListSection listSection = (ListSection) map.getValue();
-                    preparedStatement.setString(1, r.getUuid());
-                    preparedStatement.setString(2, map.getKey().getTitle());
-                    for (String s : listSection.getList()) {
-                        preparedStatement.setString(3, s + "\n");
-                    }
+                switch (map.getKey()) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        TextSection textSection = (TextSection) map.getValue();
+                        preparedStatement.setString(2, map.getKey().toString());
+                        preparedStatement.setString(3, textSection.getText());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> list = ((ListSection) map.getValue()).getList();
+                        preparedStatement.setString(2, map.getKey().toString());
+                        String joined = String.join("\n", list);
+                        preparedStatement.setString(3, joined);
+                        break;
                 }
                 preparedStatement.addBatch();
             }
@@ -199,21 +207,6 @@ public class SqlStorage implements Storage {
         try (PreparedStatement ps = conn.prepareStatement("DELETE FROM sections WHERE uuid_section = ?")) {
             ps.setString(1, r.getUuid());
             ps.execute();
-        }
-    }
-
-    public SectionType renameSection(String s) {
-        switch (s) {
-            case ("Личные качества"):
-                return SectionType.PERSONAL;
-            case ("Позиция"):
-                return SectionType.OBJECTIVE;
-            case ("Достижения"):
-                return SectionType.ACHIEVEMENT;
-            case ("Квалификация"):
-                return SectionType.QUALIFICATIONS;
-            default:
-                return null;
         }
     }
 }
