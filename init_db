@@ -1,0 +1,15 @@
+create table sections
+(
+  id            serial   not null
+    constraint sections_pk
+      primary key,
+  uuid_section  char(36) not null
+    constraint sections_resume_uuid_fk
+      references resume
+      on delete cascade,
+  section_type  text     not null,
+  section_value text     not null
+);
+
+alter table sections
+  owner to postgres;
