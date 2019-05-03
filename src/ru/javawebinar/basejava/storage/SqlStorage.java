@@ -172,7 +172,8 @@ public class SqlStorage implements Storage {
                 break;
             case ACHIEVEMENT:
             case QUALIFICATIONS:
-                ListSection listSection = new ListSection(sectionValue);
+                String[] strings = sectionValue.split("\n");
+                ListSection listSection = new ListSection(strings);
                 r.addSection(sectionType, listSection);
                 break;
         }
@@ -193,7 +194,7 @@ public class SqlStorage implements Storage {
                     case QUALIFICATIONS:
                         List<String> list = ((ListSection) map.getValue()).getList();
                         preparedStatement.setString(2, map.getKey().toString());
-                        String joined = String.join("\n", list);
+                        String joined = String.join("\n" , list);
                         preparedStatement.setString(3, joined);
                         break;
                 }
