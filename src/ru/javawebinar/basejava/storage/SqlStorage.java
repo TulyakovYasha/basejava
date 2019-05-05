@@ -6,6 +6,7 @@ import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,11 @@ public class SqlStorage implements Storage {
     private SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException(e);
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
@@ -95,35 +101,28 @@ public class SqlStorage implements Storage {
     @Override
     public List<Resume> getAllSorted() {
         return sqlHelper.transactionalExecute(conn -> {
-            List<Resume> resumes = new ArrayList<>();
+            Map<String, Resume> map = new LinkedHashMap<>();
             try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid ")) {
                 ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
-                    Resume resume = new Resume(rs.getString("uuid"), rs.getString("full_name"));
-                    resumes.add(resume);
+                    String uuid = rs.getString("uuid");
+                    Resume resume = new Resume(uuid, rs.getString("full_name"));
+                    map.putIfAbsent(uuid, resume);
                 }
             }
             try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM contact")) {
                 ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
-                    for (Resume resume : resumes) {
-                        if (rs.getString("resume_uuid").equals(resume.getUuid())) {
-                            addContacts(rs, resume);
-                        }
-                    }
+                    addContacts(rs, map.get(rs.getString("resume_uuid")));
                 }
             }
             try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM sections")) {
                 ResultSet rs = preparedStatement.executeQuery();
                 while (rs.next()) {
-                    for(Resume resume : resumes){
-                        if(rs.getString("uuid_section").equals(resume.getUuid())){
-                            addSections(rs, resume);
-                        }
-                    }
+                    addSections(rs, map.get(rs.getString("uuid_section")));
                 }
             }
-            return resumes;
+            return new ArrayList<>(map.values());
         });
     }
 
