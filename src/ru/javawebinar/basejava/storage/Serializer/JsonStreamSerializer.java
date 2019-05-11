@@ -21,4 +21,5 @@ public class JsonStreamSerializer implements IOFileStrategy {
             return JsonParser.read(reader, Resume.class);
         }
     }
+
 }

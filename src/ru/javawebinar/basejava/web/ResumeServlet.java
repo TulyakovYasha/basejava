@@ -1,8 +1,7 @@
 package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.Config;
-import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -11,10 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.Writer;
 
 public class ResumeServlet extends HttpServlet {
-    private Storage storage;
+
+    private Storage storage; // = Config.get().getStorage();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -23,37 +22,67 @@ public class ResumeServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
+        String uuid = request.getParameter("uuid");
+        String fullName = request.getParameter("fullName");
+        Resume r = storage.get(uuid);
+        r.setFullName(fullName);
+        for (ContactType type : ContactType.values()) {
+            String value = request.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                r.addContact(type, value);
+            } else {
+                r.getContacts().remove(type);
+            }
+        }
+        for (SectionType sectionType : SectionType.values()) {
+            String value = request.getParameter(sectionType.name());
+            if (value == null) {
+                r.getSections().remove(sectionType);
+            } else {
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        TextSection textSection = new TextSection(value);
+                        r.addSection(sectionType, textSection);
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        String[] strings = value.split("\n");
+                        ListSection listSection = new ListSection(strings);
+                        r.addSection(sectionType, listSection);
+                        break;
+                }
+            }
+        }
+        storage.update(r);
+        response.sendRedirect("resume");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-//        response.setHeader("Content-Type", "text/html; charset=UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-//        String name = request.getParameter("name");
-//        response.getWriter().write(name == null ? "Hello Resumes!" : "Hello " + name + '!');
-        Writer writer = response.getWriter();
-        writer.write(
-                "<html>\n" +
-                        "<head> Список резюме </head>\n"+
-                        "<body>\n" +
-                        "<section>\n" +
-                        "<table border=\"1\" cellpadding=\"8\" cellspacing=\"0\">\n" +
-                        "    <tr>\n" +
-                        "        <th>Имя</th>\n" +
-                        "        <th>Email</th>\n" +
-                        "    </tr>\n");
-        for (Resume resume : storage.getAllSorted()) {
-            writer.write(
-                    "<tr>\n" +
-                            "     <td><a href=\"resume?uuid=" + resume.getUuid() + "\">" + resume.getFullName() + "</a></td>\n" +
-                            "     <td>" + resume.getContact(ContactType.MAIL) + "</td>\n" +
-                            "</tr>\n");
+        String uuid = request.getParameter("uuid");
+        String action = request.getParameter("action");
+        if (action == null) {
+            request.setAttribute("resumes", storage.getAllSorted());
+            request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
+            return;
         }
-        writer.write("</table>\n" +
-                "</section>\n" +
-                "</body>\n" +
-                "</html>\n");
+        Resume r;
+        switch (action) {
+            case "delete":
+                storage.delete(uuid);
+                response.sendRedirect("resume");
+                return;
+            case "view":
+            case "edit":
+                r = storage.get(uuid);
+                break;
+            default:
+                throw new IllegalArgumentException("Action " + action + " is illegal");
+        }
+        request.setAttribute("resume", r);
+        request.getRequestDispatcher(
+                ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
+        ).forward(request, response);
     }
 }

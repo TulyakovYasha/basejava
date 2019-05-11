@@ -182,17 +182,16 @@ public class SqlStorage implements Storage {
         try (PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO sections (UUID_SECTION, SECTION_TYPE, SECTION_VALUE) VALUES (?, ?, ?)")) {
             preparedStatement.setString(1, r.getUuid());
             for (Map.Entry<SectionType, AbstractSection> map : r.getSections().entrySet()) {
+                preparedStatement.setString(2, map.getKey().toString());
                 switch (map.getKey()) {
                     case PERSONAL:
                     case OBJECTIVE:
                         TextSection textSection = (TextSection) map.getValue();
-                        preparedStatement.setString(2, map.getKey().toString());
                         preparedStatement.setString(3, textSection.getText());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         List<String> list = ((ListSection) map.getValue()).getList();
-                        preparedStatement.setString(2, map.getKey().toString());
                         String joined = String.join("\n" , list);
                         preparedStatement.setString(3, joined);
                         break;
