@@ -3,6 +3,7 @@ package ru.javawebinar.basejava.web;
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.model.*;
 import ru.javawebinar.basejava.storage.Storage;
+import ru.javawebinar.basejava.util.HtmlUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -29,7 +30,7 @@ public class ResumeServlet extends HttpServlet {
         r.setFullName(fullName);
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
-            if (value != null && value.trim().length() != 0) {
+            if (!HtmlUtil.isEmpty(value)) {
                 r.addContact(type, value);
             } else {
                 r.getContacts().remove(type);
@@ -37,7 +38,7 @@ public class ResumeServlet extends HttpServlet {
         }
         for (SectionType sectionType : SectionType.values()) {
             String value = request.getParameter(sectionType.name());
-            if (value == null) {
+            if (HtmlUtil.isEmpty(value)) {
                 r.getSections().remove(sectionType);
             } else {
                 switch (sectionType) {
@@ -48,9 +49,7 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        String[] strings = value.split("\n");
-                        ListSection listSection = new ListSection(strings);
-                        r.addSection(sectionType, listSection);
+                        r.addSection(sectionType, new ListSection(value.split("\\n")));
                         break;
                 }
             }
