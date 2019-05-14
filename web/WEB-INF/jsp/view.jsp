@@ -88,6 +88,7 @@
             </c:choose>
         </c:forEach>
     </table>
+    <button onclick="window.history.back()">OK</button>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
